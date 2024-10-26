@@ -21,4 +21,7 @@
 - Play with routes and route extensions ex. /hello, / , hello/2, /xyz
 - Order of the routes matter a lot
 - Write logic to handle GET, POST, PATCH, DELETE API Calls and test them on Postman
--
+- Explore routing and use of ?, + , (), \* in the routes
+- Use of regex in routes /a/ , /.\*fly$/
+- Reading the query params in the routes
+- Reading the dynamic routes
