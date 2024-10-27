@@ -1,22 +1,21 @@
 const express = require("express");
-const { adminAuth, userAuth } = require("./middlewares/auth");
 
 const app = express();
 
-// Auth middleware
-app.use("/admin", adminAuth);
-
-// We can directly add middleware here also
-app.get("/user", userAuth, (req, res) => {
-  res.send("User list");
+app.get("/getUserData", (req, res) => {
+  try {
+    // logic of DB call & get user data
+    throw new Error("test errror");
+    res.send("user data sent");
+  } catch (err) {
+    res.status(501).send("Error, contact suppor");
+  }
 });
 
-app.get("/admin/getAllData", (req, res) => {
-  res.send("All data sent");
-});
-
-app.get("/admin/deleteUser", (req, res) => {
-  res.send("User deleted");
+app.use("/", (err, req, res, next) => {
+  if (err) {
+    res.status(501).send("Something went wrong");
+  }
 });
 
 app.listen(8080, () => {
