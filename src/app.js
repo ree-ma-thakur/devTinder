@@ -1,23 +1,34 @@
 const express = require("express");
-
+const connectDB = require("./config/database");
 const app = express();
+const User = require("./models/user");
 
-app.get("/getUserData", (req, res) => {
+app.post("/signup", async (req, res) => {
+  const userObj = {
+    firstName: "Reema",
+    lastName: "Thakur",
+    email: "reema@gmail.com",
+    password: "Reema@123",
+  };
+  // creating new instance of User model
+  const user = new User(userObj);
+  // Almost all mongoose function return promise therefore we have to use await to handle it
   try {
-    // logic of DB call & get user data
-    throw new Error("test errror");
-    res.send("user data sent");
+    await user.save();
+    res.send("user addded successfully");
   } catch (err) {
-    res.status(501).send("Error, contact suppor");
+    res.status(400).send("Error: " + err.message);
   }
 });
 
-app.use("/", (err, req, res, next) => {
-  if (err) {
-    res.status(501).send("Something went wrong");
-  }
-});
-
-app.listen(8080, () => {
-  console.log("server running");
-});
+// first connect DB then listen to server
+connectDB()
+  .then(() => {
+    console.log("Connected Mongoose");
+    app.listen(8080, () => {
+      console.log("server running");
+    });
+  })
+  .catch((err) => {
+    console.log(err, "Error Mongoose connection");
+  });
