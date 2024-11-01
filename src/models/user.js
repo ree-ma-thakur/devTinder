@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
 const userSchema = new mongoose.Schema(
   {
@@ -62,6 +64,19 @@ const userSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+userSchema.methods.getJWT = async function () {
+  const user = this; // We are usign this therefore don't use arrow fun as it will refer to something else then
+  const token = await jwt.sign({ _id: user._id }, "DEV@Tinder14", {
+    expiresIn: "1d",
+  });
+  return token;
+};
+
+userSchema.methods.validatePassword = async function (passwordInputByUser) {
+  const isPswdValid = await bcrypt.compare(passwordInputByUser, this.password); // this.password is hash password
+  return isPswdValid;
+};
 
 const User = mongoose.model("User", userSchema);
 
