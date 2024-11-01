@@ -75,3 +75,5 @@
 - Improve the DB schema - PUT all appropiate validations on each field in Schema
 - Add timestamps to the userSchema
 - DATA Sanitizing - Add API validation for each field
+- Install validator
+- Explore validator library funcation and Use vlidator funcs for password, email, photoURL
