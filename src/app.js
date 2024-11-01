@@ -3,10 +3,13 @@ const connectDB = require("./config/database");
 const app = express();
 const bcrypt = require("bcrypt");
 const validator = require("validator");
+const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
 const User = require("./models/user");
 const { validateSignUpData } = require("./utils/validation");
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.post("/signup", async (req, res) => {
   try {
@@ -40,10 +43,27 @@ app.post("/login", async (req, res) => {
     if (!validator.isEmail(email)) throw new Error("Not valid email");
     const passwordValid = await bcrypt.compare(password, user.password);
     if (passwordValid) {
+      // Create JWT token
+      const token = await jwt.sign({ _id: user._id }, "DEV@Tinder14");
+      // Add token to cookie & send the response back to user
+      res.cookie("token", token);
       res.send("User logged in successfully");
     } else {
       throw new Error("Invalid credentials");
     }
+  } catch (err) {
+    res.status(400).send("ERROR : " + err.message);
+  }
+});
+
+app.get("/profile", async (req, res) => {
+  try {
+    const { token } = req.cookies;
+    if (!token) throw new Error("Invalid token");
+    const { _id } = await jwt.verify(token, "DEV@Tinder14"); // _id that we have sent as payload
+    const user = await User.findById(_id);
+    if (!user) throw new Error("No user found");
+    res.send(user);
   } catch (err) {
     res.status(400).send("ERROR : " + err.message);
   }
@@ -101,7 +121,6 @@ app.patch("/user/:userId", async (req, res) => {
       returnDocument: "after", // return the data that was before the update
       runValidators: true, // it will run validations in Schema
     });
-    console.log(user);
     res.send("user updted successfully");
   } catch (err) {
     res.status(400).send("UPDATE FAILED : " + err.message);
