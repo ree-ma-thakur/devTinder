@@ -1,19 +1,51 @@
 const express = require("express");
 const connectDB = require("./config/database");
 const app = express();
+const bcrypt = require("bcrypt");
+const validator = require("validator");
 const User = require("./models/user");
+const { validateSignUpData } = require("./utils/validation");
 
 app.use(express.json());
 
 app.post("/signup", async (req, res) => {
-  // creating new instance of User model
-  const user = new User(req.body);
-  // Almost all mongoose function return promise therefore we have to use await to handle it
   try {
+    // Validation of data
+    validateSignUpData(req);
+    // Encrypt the password
+    const { firstName, lastName, email, password } = req.body;
+    const passwordHash = await bcrypt.hash(password, 10); // 10 is dalt; number of rounds
+    // creating new instance of User model
+    const user = new User({
+      firstName,
+      lastName,
+      email,
+      password: passwordHash,
+    });
+    // Almost all mongoose function return promise therefore we have to use await to handle it
     await user.save();
     res.send("user addded successfully");
   } catch (err) {
-    res.status(400).send("Error: " + err.message);
+    res.status(400).send("ERROR : " + err.message);
+  }
+});
+
+app.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+      throw new Error("Invalid credentials");
+    }
+    if (!validator.isEmail(email)) throw new Error("Not valid email");
+    const passwordValid = await bcrypt.compare(password, user.password);
+    if (passwordValid) {
+      res.send("User logged in successfully");
+    } else {
+      throw new Error("Invalid credentials");
+    }
+  } catch (err) {
+    res.status(400).send("ERROR : " + err.message);
   }
 });
 

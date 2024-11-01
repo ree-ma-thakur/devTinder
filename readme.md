@@ -66,7 +66,7 @@
 - What are options in a Model.findOneAndUpdate method, explore more about it
 - API - Update the user with email ID
 
-# DATA SANITIZATIONS & SCHEMA VALIDATIONS
+# Data Sanitization & Schema Validations
 
 - Explore schematype options from the documention
 - Add required, unique, lowercase, min, minLength, trim
@@ -77,3 +77,11 @@
 - DATA Sanitizing - Add API validation for each field
 - Install validator
 - Explore validator library funcation and Use vlidator funcs for password, email, photoURL
+
+# Encrypting Passwords
+
+- Validate data in Signup API
+- Install bcrypt package
+- Create PasswordHash using bcrypt.hash & save the user is excrupted password
+- Create login API
+- Compare passwords and throw errors if email or password is invalid
