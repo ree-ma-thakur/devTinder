@@ -55,14 +55,15 @@ app.patch("/user", async (req, res) => {
   const userId = req.body.userId;
   const data = req.body;
   try {
-    const user = await User.findByIdAndUpdate({ email: req.body.email }, data, {
-      // const user = await User.findByIdAndUpdate(userId, data, {
+    // const user = await User.findByIdAndUpdate({ email: req.body.email }, data, {
+    const user = await User.findByIdAndUpdate(userId, data, {
       returnDocument: "after", // return the data that was before the update
+      runValidators: true, // it will run validations in Schema
     });
     console.log(user);
     res.send("user updted successfully");
   } catch (err) {
-    res.status(400).send("Something went wrong");
+    res.status(400).send("UPDATE FAILED" + err.message);
   }
 });
 
