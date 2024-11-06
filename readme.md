@@ -127,3 +127,10 @@
 - What is the advantages and disadvantage of creating index?
 - Read this arcticle about compond indexes - https://www.mongodb.com/docs/manual/core/indexes/index-types/index-compound/
 - ALWAYS THINK ABOUT CORNER CASES
+
+# ref, Populate
+
+- Write code with proper validations for POST /request/review/:status/:requestId
+- ref & populate : https://mongoosejs.com/docs/populate.html
+- Create GET /user/request/received with proper checks
+- Create GET /user/connections
