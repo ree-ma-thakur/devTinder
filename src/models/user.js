@@ -38,11 +38,15 @@ const userSchema = new mongoose.Schema(
     },
     gender: {
       type: String,
-      validate(value) {
-        if (!["male", "female", "others"].includes(value)) {
-          throw new Error("Gender data is not valid");
-        }
+      enum: {
+        values: ["male", "female", "others"],
+        message: `{VALUE} is incorrect gender type`,
       },
+      // validate(value) {
+      //   if (!["male", "female", "others"].includes(value)) {
+      //     throw new Error("Gender data is not valid");
+      //   }
+      // },
     },
     photoUrl: {
       type: String,
@@ -64,6 +68,9 @@ const userSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+// Compound Index for query where search is for both firstName, lastName or we can add multiple fields here as well
+userSchema.index({ firstName: 1, lastName: 1 });
 
 userSchema.methods.getJWT = async function () {
   const user = this; // We are usign this therefore don't use arrow fun as it will refer to something else then
