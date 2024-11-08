@@ -2,7 +2,15 @@ const express = require("express");
 const connectDB = require("./config/database");
 const app = express();
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 
+app.use(
+  // whitelisting this domain as it was not https so cookies was not getting stored on browser application; on broswer in acios we have to pass withCredentials:true
+  cors({
+    origin: "http://127.0.0.1:5173",
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(cookieParser());
 

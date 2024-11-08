@@ -134,3 +134,7 @@
 - ref & populate : https://mongoosejs.com/docs/populate.html
 - Create GET /user/request/received with proper checks
 - Create GET /user/connections
+
+# CORS
+
+- https://www.npmjs.com/package/cors
