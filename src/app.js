@@ -14,7 +14,7 @@ const userRouter = require("./routes/user");
 app.use("/", authRouter);
 app.use("/", profileRouter);
 app.use("/", requestRouter);
-app.use("/", userRouter);
+app.use("/user", userRouter);
 
 // first connect DB then listen to server
 connectDB()
